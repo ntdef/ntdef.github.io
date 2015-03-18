@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>Puzzzzzlss!! Submission to PuzzlOR.com Feb 2015 - n troy de freitas</title>
+    <title>Frogs and Flies: Running Simulations in NetworkX - n troy de freitas</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -166,21 +166,18 @@ init_mathjax = function() {
 init_mathjax();
 </script>
 
-<link rel="canonical" href="/puzzzzzlss-submission-to-puzzlorcom-feb-2015.html">
+<link rel="canonical" href="/frogs-and-flies-running-simulations-in-networkx.html">
 
         <meta name="author" content="Troy de Freitas" />
-        <meta name="keywords" content="puzzles,combinatorics" />
-        <meta name="description" content="Sometimes I&#39;ll try my luck at an ocassional math/programming puzzle. I&#39;ve been slogging through the Project Euler problems in python, but every now and then I&#39;ll check out PuzzlOR, a website dedicated to puzzles mostly relating to operational research and logistics. The puzzles there range from ..." />
+        <meta name="description" content="So I was unsatisfied with the last PuzzlOR problem I tried, and so I looked for something meatier. I came across this puzzle in the archives that I thought would be a great opportunity to practice Markov Chains. But first, lets set up the puzzle. The puzzle, as given on ..." />
 
         <meta property="og:site_name" content="n troy de freitas" />
         <meta property="og:type" content="article"/>
-        <meta property="og:title" content="Puzzzzzlss!! Submission to PuzzlOR.com Feb 2015"/>
-        <meta property="og:url" content="/puzzzzzlss-submission-to-puzzlorcom-feb-2015.html"/>
-        <meta property="og:description" content="Sometimes I&#39;ll try my luck at an ocassional math/programming puzzle. I&#39;ve been slogging through the Project Euler problems in python, but every now and then I&#39;ll check out PuzzlOR, a website dedicated to puzzles mostly relating to operational research and logistics. The puzzles there range from ..."/>
-        <meta property="article:published_time" content="2015-03-14" />
+        <meta property="og:title" content="Frogs and Flies: Running Simulations in NetworkX"/>
+        <meta property="og:url" content="/frogs-and-flies-running-simulations-in-networkx.html"/>
+        <meta property="og:description" content="So I was unsatisfied with the last PuzzlOR problem I tried, and so I looked for something meatier. I came across this puzzle in the archives that I thought would be a great opportunity to practice Markov Chains. But first, lets set up the puzzle. The puzzle, as given on ..."/>
+        <meta property="article:published_time" content="2015-03-16" />
             <meta property="article:section" content="misc" />
-            <meta property="article:tag" content="puzzles" />
-            <meta property="article:tag" content="combinatorics" />
             <meta property="article:author" content="Troy de Freitas" />
 
 
@@ -230,10 +227,10 @@ n troy de freitas            </a>
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="/puzzzzzlss-submission-to-puzzlorcom-feb-2015.html"
+                    <a href="/frogs-and-flies-running-simulations-in-networkx.html"
                        rel="bookmark"
-                       title="Permalink to Puzzzzzlss!! Submission to PuzzlOR.com Feb 2015">
-                        Puzzzzzlss!! Submission to PuzzlOR.com Feb 2015
+                       title="Permalink to Frogs and Flies: Running Simulations in NetworkX">
+                        Frogs and Flies: Running Simulations in NetworkX
                     </a>
                 </h1>
             </header>
@@ -243,31 +240,45 @@ n troy de freitas            </a>
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2015-03-14T00:00:00+01:00"> Sat 14 March 2015</time>
+        <i class="fa fa-calendar"></i><time datetime="2015-03-16T00:00:00+01:00"> Mon 16 March 2015</time>
     </span>
 
 
 
-<span class="label label-default">Tags</span>
-	<a href="/tag/puzzles.html">puzzles</a>
-        /
-	<a href="/tag/combinatorics.html">combinatorics</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>Sometimes I'll try my luck at an ocassional math/programming
-puzzle. I've been slogging through the <a href="http://projecteuler.net">Project Euler</a> problems in
-python, but every now and then I'll check out <a href="http://puzzlor.com">PuzzlOR</a>, a website
-dedicated to puzzles mostly relating to operational research
-and logistics. The puzzles there range from medium difficulty to child's play
-(i.e. sometimes you don't need a computer to solve the puzzle).</p>
-<p><a href="http://puzzlor.com/2014-02_Coins.html">This month's problem</a> is certainly of the child's play
-variety. But hey, for the chance to win $25? Heck yeah. Basically, the
-question is how do you order a set of 3 pennies, 3 nickels and 3 dimes
-such that they sum across the rows and columns equal to the values in
-the pictured below.</p>
-<p><img alt="img" src="http://puzzlor.com/images/CoinPuzzle.png" /></p>
+                <p>So I was unsatisfied with the last PuzzlOR problem I tried, and so I looked for
+something meatier. I came across <a href="http://puzzlor.com/2014-06_FrogAndFly.html">this puzzle in the
+archives</a> that I thought would be a
+great opportunity to practice Markov Chains. But first, lets set up
+the puzzle.</p>
+<p><img alt="img" src="http://puzzlor.com/images/FrogPuzzlOR_June2014_v1.gif" /></p>
+<p>The puzzle, as given on PuzzlOR.com reads, </p>
+<blockquote>
+<p>A frog is looking to catch his next meal just as a fly wonders into his pond.
+The frog jumps randomly from one lily pad to the next in hopes of catching the
+fly.  The fly is unaware of the frog and is moving randomly from one red flower
+to another.</p>
+<p>The frog can only move on the lily pads and the fly can only move on the
+flowers.  The interval at which both the frog and the fly move to a new space is
+one second.  They never sit still and always move away from the space they are
+currently on.  Both the frog and the fly have an equal chance of moving to any
+nearby space including diagonals.  For example, if the frog were on space A1, he
+would have a 1/3 chance each of moving to A2, B2, and B1.</p>
+<p>The frog will capture the fly when he lands on the same space as the fly.</p>
+<p>Question: Which space is the frog most likely to catch the fly?</p>
+</blockquote>
 <p>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For this problem, we&#39;ll use networkX to generate a graph of all the valid moves for both the frog and the fly, and simulate each critter moving from one node to anohter with equal probabilities. </p>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
@@ -278,29 +289,12 @@ In&nbsp;[1]:
 <div class="highlight-ipynb"><pre class="ipynb"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">itertools</span> <span class="kn">as</span> <span class="nn">it</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">factorial</span>
-<span class="n">PNNY</span><span class="p">,</span> <span class="n">NCKL</span><span class="p">,</span> <span class="n">DIME</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span>
-<span class="n">COINS</span> <span class="o">=</span> <span class="p">[</span><span class="n">PNNY</span><span class="p">,</span> <span class="n">NCKL</span><span class="p">,</span> <span class="n">DIME</span><span class="p">]</span>
-<span class="n">ROW_ANS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">25</span><span class="p">])</span>
-<span class="n">COL_ANS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">21</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">11</span><span class="p">])</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="how-many-permutations-do-we-need-to-try-">How many permutations do we need to try?</h3>
-<p>The first question is, how difficult is this problem going to be to compute? As it turns out, not very: to compute the number of $n$ permutations of $k$ items, we have</p>
-<p>$$ \frac{n!}{n_1!n_2!n_3!...n_k!} $$</p>
-<p>In this case, we have 3 distinct items, each with 3 elements. So the total possibility space is $\frac{9!}{3!^3} = 1680$ permutations.
-We can verify that this is true by generating all possibilities.</p>
-</div>
-</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -309,10 +303,205 @@ In&nbsp;[2]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">generate_permutations</span><span class="p">():</span> <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">permutations</span><span class="p">(</span><span class="n">COINS</span><span class="o">*</span><span class="mi">3</span><span class="p">)))</span>
+<div class="highlight-ipynb"><pre class="ipynb"><span class="c"># First, write down the adjacencies</span>
+<span class="n">frog_path</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;A3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;B3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;B3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;A3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A3&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A3&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A3&#39;</span><span class="p">,</span> <span class="s">&#39;B3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B3&#39;</span><span class="p">,</span> <span class="s">&#39;A3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B3&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B3&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">)]</span>
+</pre></div>
 
-<span class="k">print</span> <span class="s">&quot;How many permutations?&quot;</span>
-<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">generate_permutations</span><span class="p">())</span>
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[3]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="c"># Fly</span>
+<span class="n">fly_path</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;C1&#39;</span><span class="p">,</span> <span class="s">&#39;C2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="s">&#39;C3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;C3&#39;</span><span class="p">,</span> <span class="s">&#39;C2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">)]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>What we&#39;ve done is to simply write down a list of valid moves, and networkX will do the work of building the graph for us. For those who aren&#39;t familiar, NetworkX is a simple but delightful graph and network library creates graphs from simple data structures. It interfaces beautifully with numpy, which will come in handy later on. </p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[4]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">random</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[5]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">fly</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">fly_path</span><span class="p">)</span>
+<span class="n">frog</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">frog_path</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you might have noticed, I repeated a lot of valid edges above since I was more concerned about covering every move. We&#39;ll just convert the graph to an undirected model which will drop the duplicate edges.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[6]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">fly</span> <span class="o">=</span> <span class="n">fly</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+<span class="n">frog</span> <span class="o">=</span> <span class="n">frog</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we can model the behavior of the frog and the fly as two concurrent random walks. We&#39;ll start by giving each critter&#39;s starting position, and then work our way forward by choosing a random node to move to next among the neighbors, with equally weighted probabilities. The <code>random.choice</code> method will choose an element from the list with equal probabilities, which is what we want for this example.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[7]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">FROG_POS</span> <span class="o">=</span> <span class="s">&#39;B2&#39;</span>
+<span class="n">FLY_POS</span> <span class="o">=</span> <span class="s">&#39;C3&#39;</span>
+
+<span class="k">def</span> <span class="nf">next_position</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">cell</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We&#39;ll keep running our simulation until the position of the frog is the same as the position of the fly, and then return that cell.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[8]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="n">frog_pos</span><span class="p">,</span> <span class="n">fly_pos</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">frog_pos</span> <span class="o">&lt;&gt;</span> <span class="n">fly_pos</span><span class="p">:</span>
+        <span class="n">frog_pos</span> <span class="o">=</span> <span class="n">next_position</span><span class="p">(</span><span class="n">frog</span><span class="p">,</span> <span class="n">frog_pos</span><span class="p">)</span>
+        <span class="n">fly_pos</span> <span class="o">=</span> <span class="n">next_position</span><span class="p">(</span><span class="n">fly</span><span class="p">,</span> <span class="n">fly_pos</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">frog_pos</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let&#39;s simulate this event 1,000,000 times, for good measure.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[9]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">simulate</span><span class="p">(</span><span class="n">FROG_POS</span><span class="p">,</span> <span class="n">FLY_POS</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">)]</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">cell</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">)):</span>
+    <span class="k">print</span> <span class="n">cell</span><span class="p">,</span> <span class="n">value</span>
 </pre></div>
 
 </div>
@@ -326,8 +515,9 @@ In&nbsp;[2]:
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>
-How many permutations?
-1680
+A1 16794
+A2 33223
+B1 49983
 
 </pre>
 </div>
@@ -342,70 +532,10 @@ How many permutations?
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Since the number of things we need to try are so few, we can just brute force our way to a solution. Now to find our solution, we&#39;ll turn every permutation into a matrix and search the collection of matrices by summing rows and columns until we find a matrix that meets our criteria. </p>
+<p>So it looks like B1 was the clear winner by quite a margin. But simulations can seem like such a cop out. Is there any way to tell a priori what the highest probability collision cell might be? Luckily, with a little probability theory and markov chains, there is. In my next post, we&#39;ll explore how we might come to a rigorous and universal solution to the frog and fly problem using markov chains.</p>
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">
-In&nbsp;[13]:
-</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">mk_matrix_from_list</span><span class="p">(</span><span class="n">ls</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">row_sums</span><span class="p">(</span><span class="n">mat</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">mat</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">col_sums</span><span class="p">(</span><span class="n">mat</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">mat</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">
-In&nbsp;[14]:
-</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">And the answer is ... </span><span class="se">\n</span><span class="s"> &quot;</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="n">mk_matrix_from_list</span><span class="p">,</span> <span class="n">generate_permutations</span><span class="p">()):</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">row_sums</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">ROW_ANS</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">col_sums</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">COL_ANS</span><span class="p">):</span>
-        <span class="k">print</span> <span class="n">i</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>
-
-And the answer is ... 
- 
-[[ 1  5  5]
- [10  1  1]
- [10 10  5]]
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div></p>
-<p>And we're done!</p>
             </div>
             <!-- /.entry-content -->
         </article>
