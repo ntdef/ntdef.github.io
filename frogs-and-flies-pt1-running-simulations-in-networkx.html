@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>Frogs and Flies Pt.1: Running Simulations in NetworkX - n troy de freitas</title>
+    <title>Frogs and Flies Pt.1: Running Simulations in NetworkX - n troy de freitas</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -170,13 +170,13 @@ init_mathjax();
 
         <meta name="author" content="Troy de Freitas" />
         <meta name="keywords" content="puzzles,graph theory,numpy" />
-        <meta name="description" content="So I was unsatisfied with the last PuzzlOR problem I tried, and so I looked for something meatier. I came across this puzzle in the archives that I thought would be a great opportunity to practice Markov Chains. But first, lets set up the puzzle. The puzzle, as given on ..." />
+        <meta name="description" content="So I was unsatisfied with the last PuzzlOR problem I tried, and so I looked for something meatier. I came across this puzzle in the archives that I thought would be a great opportunity to practice Markov Chains. But first, lets set up the puzzle. The puzzle, as given on ..." />
 
         <meta property="og:site_name" content="n troy de freitas" />
         <meta property="og:type" content="article"/>
-        <meta property="og:title" content="Frogs and Flies Pt.1: Running Simulations in NetworkX"/>
+        <meta property="og:title" content="Frogs and Flies Pt.1: Running Simulations in NetworkX"/>
         <meta property="og:url" content="/frogs-and-flies-pt1-running-simulations-in-networkx.html"/>
-        <meta property="og:description" content="So I was unsatisfied with the last PuzzlOR problem I tried, and so I looked for something meatier. I came across this puzzle in the archives that I thought would be a great opportunity to practice Markov Chains. But first, lets set up the puzzle. The puzzle, as given on ..."/>
+        <meta property="og:description" content="So I was unsatisfied with the last PuzzlOR problem I tried, and so I looked for something meatier. I came across this puzzle in the archives that I thought would be a great opportunity to practice Markov Chains. But first, lets set up the puzzle. The puzzle, as given on ..."/>
         <meta property="article:published_time" content="2015-03-16" />
             <meta property="article:section" content="misc" />
             <meta property="article:tag" content="puzzles" />
@@ -190,6 +190,7 @@ init_mathjax();
     <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
 
     <link href="/theme/css/pygments/native.css" rel="stylesheet">
+        <link href="/theme/css/typogrify.css" rel="stylesheet">
     <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
 
 
@@ -233,8 +234,8 @@ n troy de freitas            </a>
                 <h1>
                     <a href="/frogs-and-flies-pt1-running-simulations-in-networkx.html"
                        rel="bookmark"
-                       title="Permalink to Frogs and Flies Pt.1: Running Simulations in NetworkX">
-                        Frogs and Flies Pt.1: Running Simulations in NetworkX
+                       title="Permalink to Frogs and Flies Pt.1: Running Simulations in NetworkX">
+                        Frogs and Flies Pt.1: Running Simulations in&nbsp;NetworkX
                     </a>
                 </h1>
             </header>
@@ -262,22 +263,22 @@ n troy de freitas            </a>
 something meatier. I came across <a href="http://puzzlor.com/2014-06_FrogAndFly.html">this puzzle in the
 archives</a> that I thought would be a
 great opportunity to practice Markov Chains. But first, lets set up
-the puzzle.</p>
+the&nbsp;puzzle.</p>
 <p><img alt="img" src="http://puzzlor.com/images/FrogPuzzlOR_June2014_v1.gif" /></p>
-<p>The puzzle, as given on PuzzlOR.com reads, </p>
+<p>The puzzle, as given on PuzzlOR.com&nbsp;reads, </p>
 <blockquote>
 <p>A frog is looking to catch his next meal just as a fly wonders into his pond.
 The frog jumps randomly from one lily pad to the next in hopes of catching the
 fly.  The fly is unaware of the frog and is moving randomly from one red flower
-to another.</p>
+to&nbsp;another.</p>
 <p>The frog can only move on the lily pads and the fly can only move on the
 flowers.  The interval at which both the frog and the fly move to a new space is
 one second.  They never sit still and always move away from the space they are
 currently on.  Both the frog and the fly have an equal chance of moving to any
 nearby space including diagonals.  For example, if the frog were on space A1, he
-would have a 1/3 chance each of moving to A2, B2, and B1.</p>
-<p>The frog will capture the fly when he lands on the same space as the fly.</p>
-<p>Question: Which space is the frog most likely to catch the fly?</p>
+would have a 1/3 chance each of moving to A2, B2, and&nbsp;B1.</p>
+<p>The frog will capture the fly when he lands on the same space as the&nbsp;fly.</p>
+<p>Question: Which space is the frog most likely to catch the&nbsp;fly?</p>
 </blockquote>
 <p>
 <div class="cell border-box-sizing text_cell rendered">
@@ -285,7 +286,7 @@ would have a 1/3 chance each of moving to A2, B2, and B1.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>For this problem, we&#39;ll use NetworkX to generate a graph of all the valid moves for both the frog and the fly, and simulate each critter moving from one node to anohter with equal probabilities. </p>
+<p>For this problem, we&#39;ll use NetworkX to generate a graph of all the valid moves for both the frog and the fly, and simulate each critter moving from one node to anohter with equal&nbsp;probabilities. </p>
 </div>
 </div>
 </div>
@@ -358,7 +359,7 @@ In&nbsp;[2]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>What we&#39;ve done is to simply write down a list of valid moves, and networkX will do the work of building the graph for us. For those who aren&#39;t familiar, <a href="https://networkx.github.io/">NetworkX is a simple but delightful graph and network library</a> which can create graphs from simple data structures. It interfaces beautifully with numpy, which will come in handy later on. </p>
+<p>What we&#39;ve done is to simply write down a list of valid moves, and networkX will do the work of building the graph for us. For those who aren&#39;t familiar, <a href="https://networkx.github.io/">NetworkX is a simple but delightful graph and network library</a> which can create graphs from simple data structures. It interfaces beautifully with numpy, which will come in handy later&nbsp;on. </p>
 </div>
 </div>
 </div>
@@ -399,7 +400,7 @@ In&nbsp;[4]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As you might have noticed, I repeated a lot of valid edges above since I was more concerned about covering every move. We&#39;ll just convert the graph to an undirected model which will drop the duplicate edges.</p>
+<p>As you might have noticed, I repeated a lot of valid edges above since I was more concerned about covering every move. We&#39;ll just convert the graph to an undirected model which will drop the duplicate&nbsp;edges.</p>
 </div>
 </div>
 </div>
@@ -424,7 +425,7 @@ In&nbsp;[5]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we can model the behavior of the frog and the fly as two concurrent random walks. We&#39;ll start by giving each critter&#39;s starting position, and then work our way forward by choosing a random node to move to next among the neighbors, with equally weighted probabilities. The <code>random.choice</code> method will choose an element from the list with equal probabilities, which is what we want for this example.</p>
+<p>Now we can model the behavior of the frog and the fly as two concurrent random walks. We&#39;ll start by giving each critter&#39;s starting position, and then work our way forward by choosing a random node to move to next among the neighbors, with equally weighted probabilities. The <code>random.choice</code> method will choose an element from the list with equal probabilities, which is what we want for this&nbsp;example.</p>
 </div>
 </div>
 </div>
@@ -452,7 +453,7 @@ In&nbsp;[6]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We&#39;ll keep running our simulation until the position of the frog is the same as the position of the fly, and then return that cell.</p>
+<p>We&#39;ll keep running our simulation until the position of the frog is the same as the position of the fly, and then return that&nbsp;cell.</p>
 </div>
 </div>
 </div>
@@ -480,7 +481,7 @@ In&nbsp;[7]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Let&#39;s simulate this event 1,000,000 times for good measure.</p>
+<p>Let&#39;s simulate this event 1,000,000 times for good&nbsp;measure.</p>
 </div>
 </div>
 </div>
@@ -526,7 +527,7 @@ B1 50117
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>So it looks like B1 was the clear winner by quite a margin. But simulations can seem like such a cop out. Is there any way to tell a priori what the highest probability collision cell might be? Luckily, with a little probability theory and markov chains, there is. In my next post, we&#39;ll explore how we might come to a rigorous and universal solution to the frog and fly problem using markov chains.</p>
+<p>So it looks like B1 was the clear winner by quite a margin. But simulations can seem like such a cop out. Is there any way to tell a priori what the highest probability collision cell might be? Luckily, with a little probability theory and markov chains, there is. In my next post, we&#39;ll explore how we might come to a rigorous and universal solution to the frog and fly problem using markov&nbsp;chains.</p>
 </div>
 </div>
 </div></p>
@@ -558,23 +559,23 @@ B1 50117
                         </a>
                     </li>
                     <li class="list-group-item tag-2">
-                        <a href="/tag/graph-theory.html">
-                            graph theory
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-2">
                         <a href="/tag/numpy.html">
                             numpy
                         </a>
                     </li>
-                    <li class="list-group-item tag-4">
-                        <a href="/tag/combinatorics.html">
-                            combinatorics
+                    <li class="list-group-item tag-2">
+                        <a href="/tag/graph-theory.html">
+                            graph theory
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
                         <a href="/tag/markov-chains.html">
                             markov chains
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tag/combinatorics.html">
+                            combinatorics
                         </a>
                     </li>
                     <li class="list-group-item tag-4">
