@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en"
+>
+<head>
+    <title>Frogs and Flies Pt.2: Markov Chains for Fun and for Profit! - n troy de freitas</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+<style type="text/css">
+
+/*some stuff for output/input prompts*/
+div.cell{border:1px solid transparent;display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;display:flex;flex-direction:column;align-items:stretch}div.cell.selected{border-radius:4px;border:thin #ababab solid}
+div.cell.edit_mode{border-radius:4px;border:thin #008000 solid}
+div.cell{width:100%;padding:5px 5px 5px 0;margin:0;outline:none}
+div.prompt{min-width:11ex;padding:.4em;margin:0;font-family:monospace;text-align:right;line-height:1.21429em}
+@media (max-width:480px){div.prompt{text-align:left}}div.inner_cell{display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;display:flex;flex-direction:column;align-items:stretch;-webkit-box-flex:1;-moz-box-flex:1;box-flex:1;flex:1}
+div.input_area{border:1px solid #cfcfcf;border-radius:4px;background:#f7f7f7;line-height:1.21429em}
+div.prompt:empty{padding-top:0;padding-bottom:0}
+div.input{page-break-inside:avoid;display:-webkit-box;-webkit-box-orient:horizontal;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:horizontal;-moz-box-align:stretch;display:box;box-orient:horizontal;box-align:stretch;}
+div.inner_cell{width:90%;}
+div.input_area{border:1px solid #cfcfcf;border-radius:4px;background:#f7f7f7;}
+div.input_prompt{color:navy;border-top:1px solid transparent;}
+div.output_wrapper{margin-top:5px;position:relative;display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;width:100%;}
+div.output_scroll{height:24em;width:100%;overflow:auto;border-radius:4px;-webkit-box-shadow:inset 0 2px 8px rgba(0, 0, 0, 0.8);-moz-box-shadow:inset 0 2px 8px rgba(0, 0, 0, 0.8);box-shadow:inset 0 2px 8px rgba(0, 0, 0, 0.8);}
+div.output_collapsed{margin:0px;padding:0px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;width:100%;}
+div.out_prompt_overlay{height:100%;padding:0px 0.4em;position:absolute;border-radius:4px;}
+div.out_prompt_overlay:hover{-webkit-box-shadow:inset 0 0 1px #000000;-moz-box-shadow:inset 0 0 1px #000000;box-shadow:inset 0 0 1px #000000;background:rgba(240, 240, 240, 0.5);}
+div.output_prompt{color:darkred;}
+
+a.anchor-link:link{text-decoration:none;padding:0px 20px;visibility:hidden;}
+h1:hover .anchor-link,h2:hover .anchor-link,h3:hover .anchor-link,h4:hover .anchor-link,h5:hover .anchor-link,h6:hover .anchor-link{visibility:visible;}
+/* end stuff for output/input prompts*/
+
+
+.highlight-ipynb .hll { background-color: #ffffcc }
+.highlight-ipynb  { background: #f8f8f8; }
+.highlight-ipynb .c { color: #408080; font-style: italic } /* Comment */
+.highlight-ipynb .err { border: 1px solid #FF0000 } /* Error */
+.highlight-ipynb .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight-ipynb .o { color: #666666 } /* Operator */
+.highlight-ipynb .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight-ipynb .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight-ipynb .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight-ipynb .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight-ipynb .gd { color: #A00000 } /* Generic.Deleted */
+.highlight-ipynb .ge { font-style: italic } /* Generic.Emph */
+.highlight-ipynb .gr { color: #FF0000 } /* Generic.Error */
+.highlight-ipynb .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight-ipynb .gi { color: #00A000 } /* Generic.Inserted */
+.highlight-ipynb .go { color: #888888 } /* Generic.Output */
+.highlight-ipynb .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight-ipynb .gs { font-weight: bold } /* Generic.Strong */
+.highlight-ipynb .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight-ipynb .gt { color: #0044DD } /* Generic.Traceback */
+.highlight-ipynb .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight-ipynb .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight-ipynb .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight-ipynb .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight-ipynb .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight-ipynb .kt { color: #B00040 } /* Keyword.Type */
+.highlight-ipynb .m { color: #666666 } /* Literal.Number */
+.highlight-ipynb .s { color: #BA2121 } /* Literal.String */
+.highlight-ipynb .na { color: #7D9029 } /* Name.Attribute */
+.highlight-ipynb .nb { color: #008000 } /* Name.Builtin */
+.highlight-ipynb .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight-ipynb .no { color: #880000 } /* Name.Constant */
+.highlight-ipynb .nd { color: #AA22FF } /* Name.Decorator */
+.highlight-ipynb .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight-ipynb .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight-ipynb .nf { color: #0000FF } /* Name.Function */
+.highlight-ipynb .nl { color: #A0A000 } /* Name.Label */
+.highlight-ipynb .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight-ipynb .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight-ipynb .nv { color: #19177C } /* Name.Variable */
+.highlight-ipynb .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight-ipynb .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight-ipynb .mf { color: #666666 } /* Literal.Number.Float */
+.highlight-ipynb .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight-ipynb .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight-ipynb .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight-ipynb .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight-ipynb .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight-ipynb .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight-ipynb .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight-ipynb .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight-ipynb .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight-ipynb .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight-ipynb .sx { color: #008000 } /* Literal.String.Other */
+.highlight-ipynb .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight-ipynb .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight-ipynb .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight-ipynb .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight-ipynb .vc { color: #19177C } /* Name.Variable.Class */
+.highlight-ipynb .vg { color: #19177C } /* Name.Variable.Global */
+.highlight-ipynb .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight-ipynb .il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+div.entry-content {
+  overflow: visible;
+  padding: 8px;
+}
+.input_area {
+  padding: 0.2em;
+}
+
+a.heading-anchor {
+ white-space: normal;
+}
+
+.rendered_html
+code {
+ font-size: .8em;
+}
+
+pre.ipynb {
+  color: black;
+  background: #f7f7f7;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0;
+  margin: 0px;
+  font-size: 13px;
+}
+
+/* remove the prompt div from text cells */
+div.text_cell .prompt {
+    display: none;
+}
+
+/* remove horizontal padding from text cells, */
+/* so it aligns with outer body text */
+div.text_cell_render {
+    padding: 0.5em 0em;
+}
+
+img.anim_icon{padding:0; border:0; vertical-align:middle; -webkit-box-shadow:none; -box-shadow:none}
+</style>
+
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+<script type="text/javascript">
+init_mathjax = function() {
+    if (window.MathJax) {
+        // MathJax loaded
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+            },
+            displayAlign: 'left', // Change this to 'center' to center equations.
+            "HTML-CSS": {
+                styles: {'.MathJax_Display': {"margin": 0}}
+            }
+        });
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    }
+}
+init_mathjax();
+</script>
+
+<link rel="canonical" href="/frogs-and-flies-pt2-markov-chains-for-fun-and-for-profit.html">
+
+        <meta name="author" content="Troy de Freitas" />
+        <meta name="keywords" content="puzzles,graph theory,numpy,markov chains,probability" />
+        <meta name="description" content="In my last post, I talked about using graphs and simulations to solve a problem of a frog and a fly traversing a grid until they collide. Both the agents could only walk on a restricted path, which we modeled using a graph that connected valid moves. The simulation was ..." />
+
+        <meta property="og:site_name" content="n troy de freitas" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Frogs and Flies Pt.2: Markov Chains for Fun and for Profit!"/>
+        <meta property="og:url" content="/frogs-and-flies-pt2-markov-chains-for-fun-and-for-profit.html"/>
+        <meta property="og:description" content="In my last post, I talked about using graphs and simulations to solve a problem of a frog and a fly traversing a grid until they collide. Both the agents could only walk on a restricted path, which we modeled using a graph that connected valid moves. The simulation was ..."/>
+        <meta property="article:published_time" content="2015-03-17" />
+            <meta property="article:section" content="misc" />
+            <meta property="article:tag" content="puzzles" />
+            <meta property="article:tag" content="graph theory" />
+            <meta property="article:tag" content="numpy" />
+            <meta property="article:tag" content="markov chains" />
+            <meta property="article:tag" content="probability" />
+            <meta property="article:author" content="Troy de Freitas" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.cosmo.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">
+n troy de freitas            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="/category/misc.html">Misc</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/frogs-and-flies-pt2-markov-chains-for-fun-and-for-profit.html"
+                       rel="bookmark"
+                       title="Permalink to Frogs and Flies Pt.2: Markov Chains for Fun and for Profit!">
+                        Frogs and Flies Pt.2: Markov Chains for Fun and for Profit!
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2015-03-17T00:00:00+01:00"> Tue 17 March 2015</time>
+    </span>
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/puzzles.html">puzzles</a>
+        /
+	<a href="/tag/graph-theory.html">graph theory</a>
+        /
+	<a href="/tag/numpy.html">numpy</a>
+        /
+	<a href="/tag/markov-chains.html">markov chains</a>
+        /
+	<a href="/tag/probability.html">probability</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>In my <a href="#">last post</a>, I talked about using graphs and simulations to solve a
+problem of a frog and a fly traversing a grid until they collide. Both the
+agents could only walk on a restricted path, which we modeled using a graph that
+connected valid moves. The simulation was great and all, but how do we prove
+that our results are correct?</p>
+<p>We use Markov Chains of course!</p>
+<h2>Markov Chains, but in a way that won't make you cry buckets of tears.</h2>
+<p>Now I realize that the mere mention of Markov Chains makes some people shudder.
+To others, it just sounds like the name of a cheap vodka. But really Markov
+Chains are not all that complicated: basically a Markov Chain describes how a
+system might evolve over time when we know the probabilities of how the system
+might change given that it was in a certain state before.</p>
+<p>It's best explained with an example. </p>
+<p>Suppose you wanted to know how my Netflix viewing habits evolve over time. After
+I'm done watching a show, what am I likely to watch the next time I'm on
+Netflix? And the next time? And the time after that? And the time after that?
+And the time after that? <em>ad nauseum</em></p>
+<h2>Markov Chains, House of Cards and You</h2>
+<p>Say that I'm watching House of Cards and once the episode is over, there's a 60%
+chance that I'll watch the next episode. You leave and say you're going 
+check in on me tomorrow around the same time, which leaves me time to watch,
+say, 8 episodes of any show.  What's the probability that I'll still be watching
+House of Cards when you get back, given that I'll watch another epsiode of the
+same series 60% of the time?</p>
+<p>Well, we could give a function <span class="math">\(p(t) = p_0^t\)</span> where <span class="math">\(p_0\)</span> is the probability of
+watching the same show after I finish this one, given that I started watching
+House of Cards. This is essentially what a Markov Chain is: a series of states
+with a certain proability of transition between them. The idea is to start at
+time 0 and see how a state evolves over time. In fact, Netflix does this kind of
+analysis all the time, and they, quite famously, found that <a href="#">people generally
+tend to binge watch shows</a> on Netflix.</p>
+<p>Usually Markov chains are given in a matrix form:</p>
+<div class="math">$$
+\begin{bmatrix}
+.60 &amp; .20 \\
+.40 &amp; .80
+\end{bmatrix}
+$$</div>
+<p>The entries are the probabilties of going from the row state to the column
+state. To contimue the example above, row 1, column 1, is the probability of
+watching HoC again. and row 2, column 1 is the proability of watching something
+else, given that I'm watching HoC. On the other hand row 2, column 1 gives the
+proability that I'll be watching House of Cards next time, given that I was
+watching somethin else, and likewise for row 2, column 2.</p>
+<p>In the case of the frog and fly problem, we can give similar conditional
+proabilities for going from one cell to another.</p>
+<p>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>First, lets convert our grap to a stochastic matrix. A stochastic matrix is a matrix represenation of a markov chain where the entries represent the probability of going from state i to state j. In our case, the stochasic matrix represents the probability of our critter moving from a cell to any other cell.</p>
+<p>We&#39;ll write a function that will give equal weights to moving over each edge of our graph and return the desired matrix.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[1]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[10]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">convert_to_stochastic</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+    <span class="n">new_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+    <span class="n">new_graph</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">nbr</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+            <span class="n">new_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nbr</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_matrix</span><span class="p">(</span><span class="n">new_graph</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">new_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[11]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">frog</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">fly</span><span class="p">)</span>
+<span class="n">fly</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">frog</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">convert_to_stochastic</span><span class="p">(</span><span class="n">frog</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">convert_to_stochastic</span><span class="p">(</span><span class="n">fly</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[12]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array_str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">max_line_width</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[13]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+[[ 0.    0.2   0.    0.33  0.2   0.    0.    0.    0.  ]
+ [ 0.33  0.    0.33  0.33  0.2   0.33  0.    0.    0.  ]
+ [ 0.    0.2   0.    0.    0.2   0.33  0.    0.    0.  ]
+ [ 0.33  0.2   0.    0.    0.2   0.    0.    0.    0.  ]
+ [ 0.33  0.2   0.33  0.33  0.    0.33  0.    0.    0.  ]
+ [ 0.    0.2   0.33  0.    0.2   0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]]
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[14]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">g</span><span class="o">.</span><span class="n">dtype</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">
+    Out[14]:</div>
+
+
+<div class="output_text output_subarea output_pyout">
+<pre>
+dtype(&apos;float64&apos;)
+</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[15]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">((</span><span class="n">y</span><span class="o">**</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+[[ 0.    0.    0.07]
+ [ 0.14  0.    0.21]
+ [ 0.14  0.29  0.14]]
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[16]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="c"># Probability of being in the cell at time t is given by the matrix</span>
+<span class="n">FROG_START</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">FLY_START</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">start_vec</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">mat</span><span class="o">**</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">start_vec</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">FROG_START</span><span class="p">))</span>
+<span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="n">FLY_START</span><span class="p">))</span>
+<span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">FROG_START</span><span class="p">),</span> <span class="n">at_time</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="n">FLY_START</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+[[ 0.14  0.22  0.14  0.14  0.22  0.14  0.    0.    0.  ]]
+[[ 0.12  0.12  0.    0.23  0.    0.    0.11  0.39  0.03]]
+[[ 0.01948052  0.03246753  0.          0.03896104  0.          0.          0.
+   0.          0.        ]]
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[17]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">FROG_START</span><span class="p">),</span> <span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="n">FLY_START</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[18]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">time_at_first_intersect</span><span class="p">(</span><span class="n">t</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">FROG_START</span><span class="p">),</span> <span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="n">FLY_START</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> 
+                                                <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">FROG_START</span><span class="p">),</span> <span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="n">FLY_START</span><span class="p">)))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[19]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="c"># SO note that for this to make sense, you need to make it geometric. </span>
+<span class="c"># The intersection at time t means time at first intersection, which means you have to </span>
+<span class="c"># compute the probability of not intersecting until time t, which is a geometric random variable.</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let $Y_{ij}(t)$ be the probability of the fly being at the $ij$-th cell at time t, and let $X_{ij}(t)$ be likewise for the frog for $i$ in  $\{A,B,C\}$ and $j$ in $\{1,2,3\}$. Let $p$ be a vector where the $i$th entry is 1 for the starting cell of the critter and 0 otherwise, and let $M$ be the stochastic transition matrix. We can compute the probability of being in the $ij$th cell at time $t$ is given by the $ij$the entry of the vector $q(t)$, where 
+$$q(t) = M^{t}p$$.</p>
+<p>Since $X$ and $Y$ are independent, the probability of both being at the $ij$ cell at time $t$ is $Z_{ij}(t) = X_{ij}(t)Y_{ij}(t)$ and we have
+$$ Z_{ij}(t) = q_X(t)q_Y(t)$$.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[20]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+[[ 0.25  0.05  0.17  0.17  0.15  0.17  0.    0.    0.  ]
+ [ 0.08  0.15  0.    0.17  0.15  0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]
+ [ 0.17  0.1   0.17  0.33  0.2   0.17  0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]
+ [ 0.08  0.05  0.    0.    0.05  0.    0.    0.    0.  ]
+ [ 0.08  0.05  0.    0.    0.05  0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]]
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[21]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">h</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">(</span><span class="n">y</span><span class="o">**</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">g</span><span class="o">**</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">FROG_START</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">FLY_START</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[22]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">g</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">FROG_START</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">
+    Out[22]:</div>
+
+
+<div class="output_text output_subarea output_pyout">
+<pre>
+matrix([[ 0.2,  0.2,  0.2,  0.2,  0. ,  0.2,  0. ,  0. ,  0. ]])
+</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[23]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">g</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">
+    Out[23]:</div>
+
+
+<div class="output_text output_subarea output_pyout">
+<pre>
+matrix([[ 0.        ,  0.2       ,  0.        ,  0.33333333,  0.2       ,
+          0.        ,  0.        ,  0.        ,  0.        ],
+        [ 0.33333333,  0.        ,  0.33333333,  0.33333333,  0.2       ,
+          0.33333333,  0.        ,  0.        ,  0.        ],
+        [ 0.        ,  0.2       ,  0.        ,  0.        ,  0.2       ,
+          0.33333333,  0.        ,  0.        ,  0.        ],
+        [ 0.33333333,  0.2       ,  0.        ,  0.        ,  0.2       ,
+          0.        ,  0.        ,  0.        ,  0.        ],
+        [ 0.33333333,  0.2       ,  0.33333333,  0.33333333,  0.        ,
+          0.33333333,  0.        ,  0.        ,  0.        ],
+        [ 0.        ,  0.2       ,  0.33333333,  0.        ,  0.2       ,
+          0.        ,  0.        ,  0.        ,  0.        ],
+        [ 0.        ,  0.        ,  0.        ,  0.        ,  0.        ,
+          0.        ,  0.        ,  0.        ,  0.        ],
+        [ 0.        ,  0.        ,  0.        ,  0.        ,  0.        ,
+          0.        ,  0.        ,  0.        ,  0.        ],
+        [ 0.        ,  0.        ,  0.        ,  0.        ,  0.        ,
+          0.        ,  0.        ,  0.        ,  0.        ]])
+</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[24]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">h</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">
+    Out[24]:</div>
+
+
+<div class="output_text output_subarea output_pyout">
+<pre>
+matrix([[ 0.0299077]])
+</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[25]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+[[ 0.    0.2   0.    0.33  0.2   0.    0.    0.    0.  ]
+ [ 0.33  0.    0.33  0.33  0.2   0.33  0.    0.    0.  ]
+ [ 0.    0.2   0.    0.    0.2   0.33  0.    0.    0.  ]
+ [ 0.33  0.2   0.    0.    0.2   0.    0.    0.    0.  ]
+ [ 0.33  0.2   0.33  0.33  0.    0.33  0.    0.    0.  ]
+ [ 0.    0.2   0.33  0.    0.2   0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]
+ [ 0.    0.    0.    0.    0.    0.    0.    0.    0.  ]]
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[26]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">collide_at</span><span class="p">(</span><span class="n">t</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">FROG_START</span><span class="p">),</span> <span class="n">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">FLY_START</span><span class="p">))</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">collide_at</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">collide_at</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">collide_at</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">collide_at</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">collide_at</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">collide_at</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">collide_at</span><span class="p">(</span><span class="mi">7</span><span class="p">)))</span><span class="o">*</span><span class="p">(</span><span class="n">collide_at</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">dont_collide_at</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">collide_at</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">dont_collide_at</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">collide_at</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">dont_collide_at</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">collide_at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">45</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
+In&nbsp;[560]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="mi">1</span> <span class="o">-</span> <span class="n">collide_at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)],</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">
+    Out[560]:</div>
+
+
+<div class="output_text output_subarea output_pyout">
+<pre>
+array([ 0.9767923 ,  0.96342484,  1.        ,  0.90128029,  1.        ,
+        1.        ,  1.        ,  1.        ,  1.        ])
+</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+    
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="https://github.com/ntdef"><i class="fa fa-github-square fa-lg"></i> GitHub</a></li>
+                <li class="list-group-item"><a href="http://linkedin.com/in/ntdefreitas"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a></li>
+              </ul>
+            </li>
+
+
+
+            <li class="list-group-item"><a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+                <ul class="list-group " id="tags">
+                    <li class="list-group-item tag-1">
+                        <a href="/tag/puzzles.html">
+                            puzzles
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-2">
+                        <a href="/tag/graph-theory.html">
+                            graph theory
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-2">
+                        <a href="/tag/numpy.html">
+                            numpy
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tag/probability.html">
+                            probability
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tag/markov-chains.html">
+                            markov chains
+                        </a>
+                    </li>
+                    <li class="list-group-item tag-4">
+                        <a href="/tag/combinatorics.html">
+                            combinatorics
+                        </a>
+                    </li>
+                </ul>
+            </li>
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="http://getpelican.com/" target="_blank">
+                Pelican
+            </a>
+        </li>
+        <li class="list-group-item">
+            <a href="http://python.org/" target="_blank">
+                Python.org
+            </a>
+        </li>
+        <li class="list-group-item">
+            <a href="http://jinja.pocoo.org/" target="_blank">
+                Jinja2
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2015 Troy de Freitas
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+</body>
+</html>
