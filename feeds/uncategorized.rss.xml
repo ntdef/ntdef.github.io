@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>N. Troy de Freitas</title><link href="http://ntdef.github.io/" rel="alternate"></link><link href="http://ntdef.github.io/feeds/all.atom.xml" rel="self"></link><id>http://ntdef.github.io/</id><updated>2015-03-14T00:00:00-05:00</updated><entry><title>Markov Chains for Fun and Profit!</title><link href="http://ntdef.github.io/markov-chains-for-fun-and-profit.html" rel="alternate"></link><updated>2015-03-14T00:00:00-05:00</updated><author><name>N. Troy de Freitas</name></author><id>tag:ntdef.github.io,2015-03-14:markov-chains-for-fun-and-profit.html</id><summary type="html">&lt;p&gt;Markov Chains are incredible in a statisticians arsenal. You can solve lots of
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>N. Troy de Freitas</title><link>http://ntdef.github.io/</link><description>A Journal of Statistical Thinking Outloud</description><atom:link href="http://ntdef.github.io/feeds/uncategorized.rss.xml" rel="self"></atom:link><lastBuildDate>Sat, 14 Mar 2015 00:00:00 -0500</lastBuildDate><item><title>Markov Chains for Fun and Profit!</title><link>http://ntdef.github.io/markov-chains-for-fun-and-profit.html</link><description>&lt;p&gt;Markov Chains are incredible in a statisticians arsenal. You can solve lots of
 seemingly complicated problems with Markov Chains given the right structure. To
 illustrate, here's an example using a puzzle that appeared in
 &lt;a href="http://www.puzzlor.com/2014-06_FrogAndFly.html"&gt;PuzzlOR's January 2014&lt;/a&gt;
@@ -301,4 +301,4 @@ our graph and return the desired matrix.&lt;/p&gt;
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</summary><category term="puzzle"></category><category term="math"></category></entry></feed>
+&lt;/script&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">N. Troy de Freitas</dc:creator><pubDate>Sat, 14 Mar 2015 00:00:00 -0500</pubDate><guid>tag:ntdef.github.io,2015-03-14:markov-chains-for-fun-and-profit.html</guid><category>puzzle</category><category>math</category></item></channel></rss>

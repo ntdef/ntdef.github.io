@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href='http://fonts.googleapis.com/css?family=Noticia+Text:400,700' rel='stylesheet' type='text/css' />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="">
+    <meta name="author" content="N. Troy de Freitas">
+
+    <title> Markov Chains for Fun and Profit! | N. Troy de Freitas </title>
+
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="/theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="/theme/css/font-awesome.css" type="text/css"/>
+    <link rel="shortcut icon" href="/theme/images/favicon.ico">
+  </head>
+  <body>
+    <div class=container>
+<div class="header">
+    <a href="index.html">N. Troy de Freitas</a> <span class="muted">A Journal of Statistical Thinking Outloud</span>
+</div>
+
+<div class=navigation>
+    <ul>
+            <li><a href="/index.html">Blog</a> </li>
+            <li><a href="/archives.html">Archive</a> </li>
+            <li><a href="/tags.html">Tags</a> </li>
+            <li><a href="/pages/projects.html">Projects</a> </li>
+            <li><a href="/pages/talks.html">Talks</a> </li>
+            <li><a href="/pages/about-me.html">About</a> </li>
+    </ul>
+</div>
+<div class=separator></div>        
+        <div class=body>
+    <h1 class="title"> Markov Chains for Fun and Profit!</h1>
+    <p class=date> 03 14 2015 </p>
+    <p>Markov Chains are incredible in a statisticians arsenal. You can solve lots of
+seemingly complicated problems with Markov Chains given the right structure. To
+illustrate, here's an example using a puzzle that appeared in
+<a href="http://www.puzzlor.com/2014-06_FrogAndFly.html">PuzzlOR's January 2014</a>
+listing. </p>
+<p><img alt="img" src="http://www.puzzlor.com/images/FrogPuzzlOR_June2014_v1.gif" /></p>
+<p>Suppose you have a frog and a fly in a pond. The frog moves around by
+only jumping from one lily pad to an adjacent one, while the fly can only hop
+alond the flowers. They go on, milling about randomly, until they meet, in which
+case the fly becomes the frog's snack and the game ends. The question is, on
+which space is the sequence most likely to end? Given all the possible
+permutations, it seems like this would be a complicated question to answer.
+However, using Markov Chains, it's a piece of cake, as you'll see.</p>
+<p>Notice that we can model this problem as an undirected graph, where the nodes
+are the cells and the edges correspond to the valid moves for the frog or the
+fly. To this end, we'll use the delightfully simple networkX package to hold our
+graph. NetworkX provides a simple yet elegant interface for modeling graphs. Its
+simplicity makes it suitable for small projects where you want to get to an
+answer quickly. It doesn't force you to use a certain object model, and will
+happily take data structures such as the one below.</p>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+
+<span class="c"># First, write down the adjacencies</span>
+<span class="n">frog_path</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;A3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;B3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;B3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="s">&#39;A3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A3&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A3&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A3&#39;</span><span class="p">,</span> <span class="s">&#39;B3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B3&#39;</span><span class="p">,</span> <span class="s">&#39;A3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B3&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B3&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">)]</span>
+
+
+<span class="c"># Fly</span>
+<span class="n">fly_path</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;C1&#39;</span><span class="p">,</span> <span class="s">&#39;C2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="s">&#39;C3&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;C3&#39;</span><span class="p">,</span> <span class="s">&#39;C2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">)]</span>
+</pre></div>
+
+
+<p>What we've done is to simply write down a list of valid moves, and networkx will
+do the work of building the graph for us.  As you might have noticed, I repeated
+a lot of valid edges above, since I was more concerned about being covering
+every move. We'll just convert the graph to an undirected model to remove
+the duplicate edges.</p>
+<div class="highlight"><pre><span class="n">fly</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">fly_path</span><span class="p">)</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+<span class="n">frog</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">frog_path</span><span class="p">)</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Now we can model the behavior of the frog and the fly as two parallel random
+walks. We'll start with giving the starting position, and then work our way
+forward by choosing a random node to move to next among the neighbors, with
+equally weighted probabilities.</p>
+<div class="highlight"><pre><span class="n">FROG_POS</span> <span class="o">=</span> <span class="s">&#39;B2&#39;</span>
+<span class="n">FLY_POS</span>  <span class="o">=</span> <span class="s">&#39;C3&#39;</span>
+
+<span class="k">def</span> <span class="nf">next_position</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">cell</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">cell</span><span class="p">))</span>
+</pre></div>
+
+
+<p>We'll keep running our simulation until the position of the frog is the same as the position of the fly, and then return that cell.</p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="n">frog_pos</span><span class="p">,</span> <span class="n">fly_pos</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">frog_pos</span> <span class="o">&lt;&gt;</span> <span class="n">fly_pos</span><span class="p">:</span>
+        <span class="n">frog_pos</span> <span class="o">=</span> <span class="n">next_position</span><span class="p">(</span><span class="n">frog</span><span class="p">,</span> <span class="n">frog_pos</span><span class="p">)</span>
+        <span class="n">fly_pos</span> <span class="o">=</span> <span class="n">next_position</span><span class="p">(</span><span class="n">fly</span><span class="p">,</span> <span class="n">fly_pos</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">frog_pos</span>
+</pre></div>
+
+
+<p>Let's simulate this event 1,000,000 for good measure.</p>
+<div class="highlight"><pre><span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">simulate</span><span class="p">(</span><span class="n">FROG_POS</span><span class="p">,</span> <span class="n">FLY_POS</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">)]</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">cell</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">)):</span>
+    <span class="k">print</span> <span class="n">cell</span><span class="p">,</span> <span class="n">value</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">A1</span> <span class="mi">16680</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">A2</span> <span class="mi">33278</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">B1</span> <span class="mi">50042</span>
+</pre></div>
+
+
+<p>So it looks like B1 was the clear winner by quite a margin. But simulations can
+seem like such a cop out. Is there any way to tell a priori what the highest
+probability collision cell might be? Luckily, with a little probability theory
+and markov chains, there is.</p>
+<p>First, lets conver our grap to a stochastic matrix. A stochastic matrix is a
+matrix represenation of a markov chain where the entries represent the
+probability of going from state i to state j. In our case, the stochasic matrix
+represents the probability of our critter moving from a cell to any other cell.</p>
+<p>We'll write a function that will give equal weights to moving over each edge of
+our graph and return the desired matrix.</p>
+<div class="highlight"><pre><span class="c"># In iPython we can do...</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+<span class="n">pos</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">frog</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;frog&#39;</span><span class="p">)</span>
+<span class="c"># nx.draw_networkx_nodes(frog, pos=pos, node_size=500)</span>
+<span class="c"># nx.draw_networkx_edges(frog, pos=pos)</span>
+<span class="c"># nx.draw_networkx_labels(frog, pos=pos)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">frog</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;fly&#39;</span><span class="p">)</span>
+<span class="n">pos</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">fly</span><span class="p">)</span>
+<span class="c"># nx.draw_networkx_nodes(fly, pos=pos, node_size=500)</span>
+<span class="c"># nx.draw_networkx_edges(fly, pos=pos)</span>
+<span class="c"># nx.draw_networkx_labels(fly, pos=pos)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">fly</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;frog-and-fly.png&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img alt="png" src="http://ntdef.github.io/images/frog-and-fly.png" /></p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">convert_to_stochastic</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+    <span class="n">new_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+    <span class="n">new_graph</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">degree</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">nbr</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+            <span class="n">new_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nbr</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_matrix</span><span class="p">(</span><span class="n">new_graph</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">new_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span><span class="o">.</span><span class="n">T</span>
+
+
+<span class="c"># Adding nodes in here so that they are in the matrix, even though there aren&#39;t any edges connecting them.</span>
+<span class="n">frog</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">fly</span><span class="p">)</span>
+<span class="n">fly</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">frog</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">convert_to_stochastic</span><span class="p">(</span><span class="n">frog</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">convert_to_stochastic</span><span class="p">(</span><span class="n">fly</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array_str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">max_line_width</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[[</span> <span class="mf">0.</span>    <span class="mf">0.2</span>   <span class="mf">0.</span>    <span class="mf">0.33</span>  <span class="mf">0.2</span>   <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]</span>
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span> <span class="mf">0.33</span>  <span class="mf">0.</span>    <span class="mf">0.33</span>  <span class="mf">0.33</span>  <span class="mf">0.2</span>   <span class="mf">0.33</span>  <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]</span>
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span> <span class="mf">0.</span>    <span class="mf">0.2</span>   <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.2</span>   <span class="mf">0.33</span>  <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]</span>
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span> <span class="mf">0.33</span>  <span class="mf">0.2</span>   <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.2</span>   <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]</span>
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span> <span class="mf">0.33</span>  <span class="mf">0.2</span>   <span class="mf">0.33</span>  <span class="mf">0.33</span>  <span class="mf">0.</span>    <span class="mf">0.33</span>  <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]</span>
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span> <span class="mf">0.</span>    <span class="mf">0.2</span>   <span class="mf">0.33</span>  <span class="mf">0.</span>    <span class="mf">0.2</span>   <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]</span>
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span> <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]</span>
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span> <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]</span>
+ <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span> <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]]</span>
+
+<span class="n">FROG_START</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">FLY_START</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">at_time</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">start_vec</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given a starting vector `start_vec` and a stochastic matrix `mat` returns </span>
+<span class="sd">    the probabilities of being in the vector position at time t.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">mat</span><span class="o">**</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">start_vec</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&quot;Here are the probabilties for the frog to be a the given entry at time t&quot;</span>
+<span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">FROG_START</span><span class="p">))</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Here are the probabilties for the fly to be a the given entry at time t&quot;</span>
+<span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="n">FLY_START</span><span class="p">))</span>
+<span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">Here are the probabilities for both the fly and the frog to be a the given entry together at exactly time t&quot;</span>
+<span class="k">print</span> <span class="n">display</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">at_time</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">FROG_START</span><span class="p">),</span> <span class="n">at_time</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>  <span class="n">FLY_START</span><span class="p">)))</span>
+
+<span class="n">Here</span> <span class="n">are</span> <span class="n">the</span> <span class="n">probabilties</span> <span class="k">for</span> <span class="n">the</span> <span class="n">frog</span> <span class="n">to</span> <span class="n">be</span> <span class="n">a</span> <span class="n">the</span> <span class="n">given</span> <span class="n">entry</span> <span class="n">at</span> <span class="n">time</span> <span class="n">t</span>
+<span class="p">[[</span> <span class="mf">0.14</span>  <span class="mf">0.22</span>  <span class="mf">0.14</span>  <span class="mf">0.14</span>  <span class="mf">0.22</span>  <span class="mf">0.14</span>  <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]]</span>
+
+<span class="n">Here</span> <span class="n">are</span> <span class="n">the</span> <span class="n">probabilties</span> <span class="k">for</span> <span class="n">the</span> <span class="n">fly</span> <span class="n">to</span> <span class="n">be</span> <span class="n">a</span> <span class="n">the</span> <span class="n">given</span> <span class="n">entry</span> <span class="n">at</span> <span class="n">time</span> <span class="n">t</span>
+<span class="p">[[</span> <span class="mf">0.12</span>  <span class="mf">0.12</span>  <span class="mf">0.</span>    <span class="mf">0.23</span>  <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.11</span>  <span class="mf">0.39</span>  <span class="mf">0.03</span><span class="p">]]</span>
+
+<span class="n">Here</span> <span class="n">are</span> <span class="n">the</span> <span class="n">probabilities</span> <span class="k">for</span> <span class="n">both</span> <span class="n">the</span> <span class="n">fly</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">frog</span> <span class="n">to</span> <span class="n">be</span> <span class="n">a</span> <span class="n">the</span> <span class="n">given</span> <span class="n">entry</span> <span class="n">together</span> <span class="n">at</span> <span class="n">exactly</span> <span class="n">time</span> <span class="n">t</span>
+<span class="p">[[</span> <span class="mf">0.02</span>  <span class="mf">0.03</span>  <span class="mf">0.</span>    <span class="mf">0.03</span>  <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>    <span class="mf">0.</span>  <span class="p">]]</span>
+
+
+
+<span class="c"># SO note that for this to make sense, you need to make it geometric. </span>
+<span class="c"># The intersection at time t means time at first intersection, which means you have to </span>
+<span class="c"># compute the probability of not intersecting until time t, which is a geometric random variable.</span>
+</pre></div>
+
+
+<p>Let <span class="math">\(Y_{ij}(t)\)</span> be the probability of the fly being at the <span class="math">\(ij\)</span>-th cell at time t, and let <span class="math">\(X_{ij}(t)\)</span> be likewise for the frog for <span class="math">\(i\)</span> in  <span class="math">\(\{A,B,C\}\)</span> and <span class="math">\(j\)</span> in <span class="math">\(\{1,2,3\}\)</span>. Let <span class="math">\(p\)</span> be a vector where the <span class="math">\(i\)</span>th entry is 1 for the starting cell of the critter and 0 otherwise, and let <span class="math">\(M\)</span> be the stochastic transition matrix. We can compute the probability of being in the <span class="math">\(ij\)</span>th cell at time <span class="math">\(t\)</span> is given by the <span class="math">\(ij\)</span>the entry of the vector <span class="math">\(q(t)\)</span>, where 
+</p>
+<div class="math">$$q(t) = M^{t}p$$</div>
+<p>Since <span class="math">\(X\)</span> and <span class="math">\(Y\)</span> are independent, the probability of both being at the <span class="math">\(ij\)</span> cell at time <span class="math">\(t\)</span> is <span class="math">\(Z_{ij}(t) = X_{ij}(t)Y_{ij}(t)\)</span> and we have
+</p>
+<div class="math">$$ Z_{ij}(t) = q_X(t)q_Y(t)$$</div>
+<div class="highlight"><pre><span class="nx">def</span> <span class="nx">collide_at</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="o">:</span> 
+    <span class="s2">&quot;&quot;&quot;Given a time t, returns a vector of probabilties of the two critters colliding at exactly time t.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nx">np</span><span class="p">.</span><span class="nx">multiply</span><span class="p">(</span><span class="nx">at_time</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">g</span><span class="p">,</span> <span class="nx">FROG_START</span><span class="p">),</span>
+                       <span class="nx">at_time</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">FLY_START</span><span class="p">))</span>
+
+<span class="nx">print</span> <span class="s2">&quot;The probability of not colliding at time 5 is&quot;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">collide_at</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="nx">The</span> <span class="nx">probability</span> <span class="nx">of</span> <span class="nx">not</span> <span class="nx">colliding</span> <span class="nx">at</span> <span class="nx">time</span> <span class="mi">5</span> <span class="nx">is</span> <span class="cp">[</span><span class="err">[</span> <span class="mf">0.98306125</span>  <span class="mf">0.97309417</span>  <span class="mi">1</span><span class="nx">.</span>          <span class="mf">0.96805835</span>  <span class="mi">1</span><span class="nx">.</span>          <span class="mi">1</span><span class="nx">.</span>          <span class="mi">1</span><span class="nx">.</span>
+   <span class="mi">1</span><span class="nx">.</span>          <span class="mi">1</span><span class="nx">.</span>        <span class="cp">]</span><span class="p">]</span>
+
+
+
+<span class="nx">def</span> <span class="nx">dont_collide_up_till</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="o">:</span>
+    <span class="s2">&quot;&quot;&quot;Given a time t, a recursive function that returns the </span>
+<span class="s2">    probability of not colliding at all up till time t&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nx">t</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span><span class="o">:</span>
+        <span class="k">return</span> <span class="nx">np</span><span class="p">.</span><span class="nx">multiply</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">collide_at</span><span class="p">(</span><span class="nx">t</span><span class="p">)),</span> <span class="nx">dont_collide_up_till</span><span class="p">(</span><span class="nx">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="o">:</span> 
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">collide_at</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="nx">print</span> <span class="s2">&quot;Using similar logic as above, the probability of not colliding up till time 5 is&quot;</span><span class="p">,</span> <span class="nx">dont_collide_up_till</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="nx">Using</span> <span class="nx">similar</span> <span class="nx">logic</span> <span class="nx">as</span> <span class="nx">above</span><span class="p">,</span> <span class="nx">the</span> <span class="nx">probability</span> <span class="nx">of</span> <span class="nx">not</span> <span class="nx">colliding</span> <span class="nx">up</span> <span class="nx">till</span> <span class="nx">time</span> <span class="mi">5</span> <span class="nx">is</span> <span class="cp">[</span><span class="err">[</span> <span class="mf">0.96024666</span>  <span class="mf">0.9375031</span>   <span class="mi">1</span><span class="nx">.</span>          <span class="mf">0.87249192</span>  <span class="mi">1</span><span class="nx">.</span>          <span class="mi">1</span><span class="nx">.</span>          <span class="mi">1</span><span class="nx">.</span>
+   <span class="mi">1</span><span class="nx">.</span>          <span class="mi">1</span><span class="nx">.</span>        <span class="cp">]</span><span class="p">]</span>
+
+
+
+<span class="nx">sum</span><span class="p">(</span><span class="nx">np</span><span class="p">.</span><span class="nx">prod</span><span class="p">(</span><span class="nx">dont_collide_up_till</span><span class="p">(</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="nx">collide_at</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">300</span><span class="p">))</span>
+
+
+
+
+<span class="nx">matrix</span><span class="p">(</span><span class="cp">[</span><span class="err">[</span> <span class="mf">0.20741345</span><span class="p">,</span>  <span class="mf">0.34285305</span><span class="p">,</span>  <span class="mi">0</span><span class="nx">.</span>        <span class="p">,</span>  <span class="mf">0.47650194</span><span class="p">,</span>  <span class="mi">0</span><span class="nx">.</span>        <span class="p">,</span>
+          <span class="mi">0</span><span class="nx">.</span>        <span class="p">,</span>  <span class="mi">0</span><span class="nx">.</span>        <span class="p">,</span>  <span class="mi">0</span><span class="nx">.</span>        <span class="p">,</span>  <span class="mi">0</span><span class="nx">.</span>        <span class="cp">]</span><span class="p">])</span>
+</pre></div>
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+    
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+    
+<div class=twitter>
+<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+    <p class=tags>This entry was tagged as
+      <a href="/tag/puzzle.html">puzzle</a>
+      <a href="/tag/math.html">math</a>
+    </p>
+        </div>
+        
+<div class=footer>
+  <p>&copy; Copyright <script language="JavaScript">var date = new Date(); document.write(date.getFullYear());</script> by N. Troy de Freitas</p>
+  <p> Powered by <a href="http://pypi.python.org/pypi/pelican/" target="_blank">Pelican</a>.  
+    <a href="https://github.com/fjavieralba/flasky">Theme</a>  by <a href="http://fjavieralba.com">fjavieralba</a>
+  </p> 
+  <p>
+    <div class=social style="font-size: 27px;">
+      <ul>
+<a href="http://twitter.com/ntdef" target="_blank"> <li> <i class="icon-twitter-sign icon-large"> </li></i> </a><a href="http://github.com/ntdef" target="_blank"> <li> <i class="icon-github-sign icon-large"></i> </li> </a>
+
+        <a href="http://ntdef.github.io/feeds/all.rss.xml" rel="alternate" title="Recent Blog Posts"><li> <i class="icon-rss icon-large"></i> </li></a>
+      </ul>
+    </div>
+  </p>
+</div>    </div>
+  </body>
+</html>
