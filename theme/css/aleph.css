@@ -1,0 +1,138 @@
+/*
+ * Author: Troy de Freitas
+ * Date: 2015-05-22
+ * MIT License
+ * <insert description here>
+ *
+ */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", serif;
+    /* margin-top: 20px; */
+}
+
+/* Using font sizes suggested by the guy from "Design for Hackers".
+ * See article here: http://designforhackers.com/blog/font-sizes/
+ */
+h1 { font-size: 37px; }
+h2 { font-size: 28px; }
+h3 { font-size: 21px; }
+h4 { font-size: 16px; }
+h5 { font-size: 12px; }
+h6 { font-size: 9px; }
+
+header {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+.container  {
+    min-height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+*/
+
+/*
+.clearfix {
+    overflow: hidden;
+    display: block;
+}
+*/
+
+.archives {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+#content {
+    padding-top: 70px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+* #content {
+*	margin-top: 70px;
+*	margin-left: auto;
+*	margin-right: auto;
+* }
+*/
+
+/*
+#content img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 90%;
+}
+*/
+
+
+/* Navbar
+**************************************/
+nav {
+	position: fixed;
+	top: 0;
+	left: 0;
+    display: block;
+    overflow: hidden;
+}
+
+.navbar {
+    width: 100% !important;
+    height: 6.5rem;
+    z-index: 99;
+
+    display: block;
+
+    background: #fff;
+    background-color: #fff;
+
+    border-bottom: 2px solid #eee;
+    border-top: 1px solid #eee;
+}
+
+#navbar-title {
+    white-space: nowrap;
+}
+
+.site-title {
+    text-transform: uppercase;
+    font-size: 11px!;
+    font-weight: 600;
+    letter-spacing: .2rem;
+    margin-right: 35px;
+    text-decoration: none;
+    line-height: 6.5rem;
+    color: #222;
+}
+
+.navbar-link {
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .2rem;
+    margin-right: 35px;
+    text-decoration: none;
+    line-height: 6.5rem;
+    color: #222; 
+}
+
+.navbar ul {
+    margin: 0 0 0 0 !important;
+}
+
+.navbar ul li {
+    display: inline;
+}
+
+.navbar a {
+    font-weight: bold;
+}
+
+.navbar-item {
+    margin-top: 20px !important;
+}
