@@ -6,6 +6,8 @@
  *
  */
 
+@import url("pygment.css");
+
 h1, h2, h3, h4, h5, h6 {
     font-family: "Raleway", serif;
     /* margin-top: 20px; */
@@ -21,14 +23,20 @@ h4 { font-size: 16px; }
 h5 { font-size: 12px; }
 h6 { font-size: 9px; }
 
+/* this keeps everything from shifting when a scroll bar appears */
+html {
+    overflow: scroll;
+}
+
 header {
     text-align: left;
     margin-left: auto;
     margin-right: auto;
 }
 
-h2.entry-title {
-    margin-bottom: 0;
+/* To get rid of the underlining for links.  */
+a { 
+    text-decoration: none;
 }
 
 ul {
@@ -37,21 +45,9 @@ ul {
     margin: 0;
 }
 
-
-/*
-.container  {
-    min-height: 100%;
-    margin-left: auto;
-    margin-right: auto;
+h2.entry-title {
+    margin-bottom: 0;
 }
-*/
-
-/*
-.clearfix {
-    overflow: hidden;
-    display: block;
-}
-*/
 
 .archives {
     margin: 0 0 0 0;
@@ -64,13 +60,13 @@ ul {
     margin-right: auto;
 }
 
-/*
-* #content {
-*	margin-top: 70px;
-*	margin-left: auto;
-*	margin-right: auto;
-* }
-*/
+.article p {
+    margin: 12px 0px 12px 0px !important;
+}
+
+section {
+    max-width: 85%;
+}
 
 img {
 	display: block;
@@ -84,8 +80,6 @@ img {
 	margin-right: auto;
 	max-width: 90%;
 }
-
-
 
 /* Navbar
 **************************************/
@@ -117,7 +111,7 @@ nav {
 
 .site-title {
     text-transform: uppercase;
-    font-size: 11px!;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: .2rem;
     margin-right: 35px;
