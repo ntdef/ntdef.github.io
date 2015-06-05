@@ -24,6 +24,10 @@ h6 { font-size: 9px; }
 
 /* this keeps everything from shifting when a scroll bar appears */
 
+html {
+    overflow: scroll;
+}
+
 .header {
     text-align: center;
 }
@@ -81,7 +85,6 @@ body > div > section {
 **************************************/
 .container {
     width: 800px;
-    overflow: scroll;
 }
 
 
