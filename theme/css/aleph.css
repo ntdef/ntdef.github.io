@@ -10,7 +10,6 @@
 
 h1, h2, h3, h4, h5, h6 {
     font-family: "Raleway", serif;
-    /* margin-top: 20px; */
 }
 
 /* Using font sizes suggested by the guy from "Design for Hackers".
@@ -24,15 +23,11 @@ h5 { font-size: 12px; }
 h6 { font-size: 9px; }
 
 /* this keeps everything from shifting when a scroll bar appears */
-html {
-    overflow: scroll;
+
+.header {
+    text-align: center;
 }
 
-header {
-    text-align: left;
-    margin-left: auto;
-    margin-right: auto;
-}
 
 /* To get rid of the underlining for links.  */
 a { 
@@ -60,14 +55,6 @@ h2.entry-title {
     margin-right: auto;
 }
 
-.article p {
-    margin: 12px 0px 12px 0px !important;
-}
-
-section {
-    max-width: 85%;
-}
-
 img {
 	display: block;
 	margin-left: auto;
@@ -81,39 +68,60 @@ img {
 	max-width: 90%;
 }
 
+/* Title
+**************************************/
+div >  section > h2 {
+    text-align: center;
+}
+
+body > div > section {
+    margin-top: 12rem;
+}
 /* Navbar
 **************************************/
+.container {
+    width: 800px;
+}
+
+
+/*
 nav {
-	position: fixed;
+	position: relative;
 	top: 0;
 	left: 0;
-    display: block;
     overflow: hidden;
+}
+*/
+
+.header-title {
+    font-size: 3.9rem;
+    letter-spacing: 0px;
+    text-transform: lowercase;
+    /* font-family: "Incosolata", "Ubuntu Mono"; */
+    font-family: Monaco, "Lucida Console", monospace;
+}
+
+.navbar-item {
+    margin-top: 20px !important;
 }
 
 .navbar {
     width: 100% !important;
-    height: 6.5rem;
+    /* height: 12rem; */
     z-index: 99;
-
     display: block;
-
     background: #fff;
     background-color: #fff;
-
     border-bottom: 2px solid #eee;
     border-top: 1px solid #eee;
 }
 
-#navbar-title {
-    white-space: nowrap;
-}
-
 .site-title {
+    z-index: 1;
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 2.9rem;
     font-weight: 600;
-    letter-spacing: .2rem;
+    letter-spacing: 1.5rem;
     margin-right: 35px;
     text-decoration: none;
     line-height: 6.5rem;
@@ -121,14 +129,19 @@ nav {
 }
 
 .navbar-link {
+    z-index: 1;
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 1.9rem;
     font-weight: 600;
-    letter-spacing: .2rem;
-    margin-right: 35px;
+    letter-spacing: .95rem;
+    margin-right: 66px;
     text-decoration: none;
     line-height: 6.5rem;
     color: #222; 
+}
+
+#navbar-content ul {
+    text-align: center;
 }
 
 .navbar ul {
@@ -143,6 +156,6 @@ nav {
     font-weight: bold;
 }
 
-.navbar-item {
-    margin-top: 20px !important;
+.navbar-item-title {
+    display: none;
 }
