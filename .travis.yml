@@ -4,9 +4,6 @@ branches:
 language: ruby
 rvm:
   - 2.0.0 # otherwise public_suffix will fail to install
-install:
-    - gem install jekyll
-    - gem install html-proofer
 script:
   - jekyll new
   - bundle exec jekyll build --config _config.yml,_config_dev.yml
