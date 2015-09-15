@@ -11,7 +11,8 @@ visiting my blog. The problem, as I later found out, was how I had set up
 domain forwarding on NameCheap.  
 
 ## NameCheap Forwarding Done Right
- Assuming that you've [added a CNAME file at the root of your repo](#), to set
+ Assuming that you've [added a CNAME file at the root of your
+ repo](https://help.github.com/articles/tips-for-configuring-a-cname-record-with-your-dns-provider/), to set
 up your NameCheap domain to forward properly to github pages, **do not** use
 the forwarding link in the sidebar. This was my first mistake: even though it
 seems like the right option, the configuration options NameCheap provides in
@@ -22,7 +23,9 @@ addresses.
  ![namecheap-ghpages-1](/assets/images/namecheap-ghpages-1.png)
 
   To set up forwarding you need to add two static IP destinations that GitHub
- provides [here](#) which should be the same as the ones listed below.
+ provides
+ [here](https://help.github.com/articles/my-custom-domain-isn-t-working/#dns-errors)
+ which should be the same as the ones listed below.
 
  ![namecheap-ghpages-2](/assets/images/namecheap-ghpages-2.png)
 
