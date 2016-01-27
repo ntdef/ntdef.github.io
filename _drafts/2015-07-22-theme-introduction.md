@@ -1,7 +1,9 @@
 ---
 title: Theme introduction
-cover-image: hipster.jpg
+"cover-image": hipster.jpg
+published: true
 ---
+
 
 This post is a showcase of what Holo Alfa looks like, and a reference guide for how you can use it to make your blog shine.
 
@@ -102,10 +104,10 @@ In Markdown you can create a horizontal rule with `---`.
 Tables are a part of [GFM](https://help.github.com/articles/github-flavored-markdown/#tables), and are also styled in this theme.
 
 | Left-Aligned  | Center Aligned  | Right Aligned |
-| :------------ |:---------------:| -----:|
-| col 3 is      | some wordy text | $1600 |
-| col 2 is      | centered        |   $12 |
-| zebra stripes | are neat        |    $1 |
+| :------------ |:---------------:| -------------:|
+| col 3 is      | some wordy text |         $1600 |
+| col 2 is      | centered        |           $12 |
+| zebra stripes | are neat        |            $1 |
 
 ## That's it, for now... ##
 
