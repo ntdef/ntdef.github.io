@@ -13,8 +13,8 @@ bundle exec htmlproof ./_site --href-ignore "#","/simplest/" --disable-external
 cd ${HTML_FOLDER}
 
 # config
-git config --global user.email "nandomoreira.me@gmail.com"
-git config --global user.name "Fernando Moreira"
+git config --global user.email "me@ntdef.com"
+git config --global user.name "Troy de Freitas"
 
 # deploy
 git init

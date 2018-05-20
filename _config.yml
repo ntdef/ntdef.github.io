@@ -1,15 +1,13 @@
-
 # SEO settings
-title: Simplest
-description: "A free Jekyll theme for download"
-keywords: "Jekyll, theme, free, download, SEO, blog, web"
-url: http://nandomoreira.me
-baseurl: "/simplest"
-# baseurl: null
+title: "ntdef"
+description: "the blog of Troy de Freitas"
+keywords: "blog, data science, analytics, machine learning, numpy, julialang, sklearn"
+url: http://ntdef.com
+baseurl: null
+google_analytics: UA-47727049-1
 
-google_analytics: UA-52446115-1
-repo: http://github.com/nandomoreirame/simplest
-disqus_shortname: "nandothemes"
+repo: https://github.com/ntdef/ntdef.github.io
+disqus_shortname: "ntdef"
 
 # Build settings
 permalink   : /:year/:title/
@@ -30,27 +28,21 @@ sass:
 
 # Author settings
 author:
-  name     : Fernando Moreira
-  job      : Frontend Engineer
-  bio      : "Enthusiast performance, responsive design and usability, always looking for the best project and good coffee."
+  name     : Troy de Freitas
+  job      : data scientist and machine learning engineer
+  bio      : "If you’re in Chicago and you’d like to get coffee let me know! If you want to see what I’ve built you should look at my projects. While you’re there, you should take a look at Hume which I built to make deploying machine learning models a lot easier."
   thumb    : /images/author.jpg
-  email    : nandomoreira.me@gmail.com
-  url      : http://nandomoreira.me
-  github   : http://github.com/nandomoreirame
-  twitter  : http://twitter.com/nandomoreirame
-  facebook : http://facebook.com/fernando.dev
-  linkedin : http://linkedin.com/in/nandomoreirame
+  email    : me@ntdef.com
+  url      : http://ntdef.com
+  github   : http://github.com/ntdef
+  linkedin : http://linkedin.com/in/ntdefreitas
 
-# social settings
-og_locale: "pt_BR"
-twitter_card: "summary_large_image"
-twitter_site: "@nandomoreirame"
+og_locale: "en_US"
 
 gems:
   - bourbon
   - jekyll-paginate
 
-# navbar pages
 navbar:
   - slug : about
     title: About

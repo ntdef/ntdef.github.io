@@ -17,8 +17,12 @@ $small-spacing: $base-spacing / 2;
 $base-z-index: 0;
 
 // Colors
-$primary-color: #ec2028;
+// $primary-color: #ec2028;
+$primary-color: #2800d7;
+// $primary-color: #8e8e8e;
+// $primary-color: #FF0F00;
 $action-color: $primary-color;
+
 $white-color: #fff;
 $black-color: #000;
 $blue-color: #477dca;
@@ -34,7 +38,9 @@ $base-border-color: $light-gray-color;
 $base-border: 1px solid $base-border-color;
 
 // Background Colors
+// $base-background-color: $white-color;
 $base-background-color: $white-color;
+$well-background-color: #f9fafb;
 $secondary-background-color: tint($base-border-color, 80%);
 
 // Forms

@@ -12,15 +12,19 @@ body {
   height: 100%;
 }
 
+ul {
+    white-space:nowrap;
+}
+
 .clearfix {
   &:before {
     content: " ";
-    display: table;
+    display: flex;
   }
 
   &:after {
     content: " ";
-    display: table;
+    display: flex;
     clear: both;
   }
 
@@ -73,6 +77,7 @@ hr {
   border-bottom: 1px solid lighten($light-gray-color, 5%);
   margin-bottom: $small-spacing;
   min-height: 80px;
+  background-color: $well-background-color;
 }
 
 .intro {
@@ -92,9 +97,8 @@ hr {
   float: left;
   margin: 0 0 1em 0;
   cursor: pointer;
-  text-transform: uppercase;
   letter-spacing: 0.8px;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 28px;
   font-weight: 300;
 
@@ -126,14 +130,14 @@ hr {
 }
 
 .post-list {
-  background-color: lighten($light-gray-color, 17%);
+  // background-color: lighten($light-gray-color, 17%);
   padding: $base-spacing 0;
 }
 
 .post-item {
-  padding-bottom: $small-spacing;
+  // padding-bottom: $small-spacing;
   margin-bottom: $base-spacing;
-  border-bottom: 1px solid lighten($light-gray-color, 5%);
+  // border-bottom: 1px solid lighten($light-gray-color, 5%);
 
   strong {
     font-weight: 700;
@@ -150,8 +154,9 @@ hr {
 }
 
 .post-meta {
+    display: inline-block; 
+    width: 110px;
   color: $medium-gray-color;
-  font-style: italic;
 }
 
 .post-link,
@@ -202,6 +207,8 @@ hr {
   @extend .clearfix;
 
   padding: $base-spacing 0;
+  background-color: $well-background-color;
+  min-height: 120px;
 
   a {
     @extend .link;
