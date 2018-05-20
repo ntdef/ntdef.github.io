@@ -2,15 +2,13 @@ language: ruby
 branches:
   only:
     - master
-rvm:
-  - 2.0.0 # otherwise public_suffix will fail to install
 cache:
   - bundler
 install:
   - bundle install
 script:
   - bundle exec jekyll build --config _config.yml
-  - bundle exec htmlproof ./_site --only-4xx --check-favicon --check-html
+  - bundle exec htmlproofer ./_site --only-4xx --check-favicon --check-html
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
