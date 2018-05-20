@@ -1,14 +1,21 @@
 language: ruby
-branches:
-  only:
-    - master
-cache:
-  - bundler
+rvm:
+  - 2.3.1
 install:
   - bundle install
+cache:
+  - bundler
 script:
   - bundle exec jekyll build --config _config.yml
-  - bundle exec htmlproofer ./_site --only-4xx --check-favicon --check-html
+  - bundle exec htmlproofer ./_site --only-4xx --check-html --disable-external
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: _site
+  target_branch: master
+  on:
+    branch: source
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
