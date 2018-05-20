@@ -1,9 +1,13 @@
+language: ruby
 branches:
   only:
     - master
-language: ruby
 rvm:
   - 2.0.0 # otherwise public_suffix will fail to install
+cache:
+  - bundler
+install:
+  - bundle install
 script:
   - bundle exec jekyll build --config _config.yml
   - bundle exec htmlproof ./_site --only-4xx --check-favicon --check-html

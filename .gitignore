@@ -1,6 +1,4 @@
-############
-## Jekyll
-############
-
-_site/**
-.DS_STORE
+_site
+.sass-cache
+.jekyll-metadata
+.DS_Store
