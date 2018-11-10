@@ -7,7 +7,7 @@ layout: page
 - [groupby](#groupby)
 - [Hume](#hume)
 
-## [cran-server](https//github.com/UptakeOpenSource/cran-server)
+## [cran-server](https://github.com/UptakeOpenSource/cran-server)
 `cran-server` is a CRAN like R package repository that can run in containerized environment
 like Mesos or Kubernetes, meant for zero-touch R package hosting. I built `cran-server` while
 at Uptake to host our internal packages to make it easier for data scientists to install
