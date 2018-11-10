@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ntdef</title>
+    <description>the blog of Troy de Freitas</description>
+    <link>http://ntdef.com/</link>
+    <atom:link href="http://ntdef.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 10 Nov 2018 23:09:57 +0000</pubDate>
+    <lastBuildDate>Sat, 10 Nov 2018 23:09:57 +0000</lastBuildDate>
+    <generator>Jekyll v3.7.3</generator>
+    
+      <item>
+        <title>Taming ~/Downloads with cron and find</title>
+        <description>&lt;p&gt;I’m going to go out on a limb and say you have a Downloads folder problem. I certainly do. I regularly rack up 20 gigabytes worth of stuff just accumulating there with the (false) hopes of one day getting around to those saved articles, libraries and other debris off the interwebs. For me, it was a matter of coming to terms with the fact that I’m never going to touch that stuff.&lt;/p&gt;
+
+&lt;p&gt;It was a thought reaffirmed to me while reading &lt;a href=&quot;http://amzn.com/B00KK0PICK&quot;&gt;a book on tidying up&lt;/a&gt; where the author notes that many people she consulted with accumulated books with the intention to read them, but seldmom did. The best opportunity to read something is when its first presented to you: later on its more likely to fall by the wayside.&lt;/p&gt;
+
+&lt;p&gt;The same goes for downloads. I would find myself dowloading files with the intention to look over them later only to find time grow too scarce. And so to force myself to confront the inevitable with new material, I added the following line to my cron tab:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;c&quot;&gt;# Runs every day at 5:45 pm&lt;/span&gt;
+45 17 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; find ~/Downloads &lt;span class=&quot;se&quot;&gt;\(&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-type&lt;/span&gt; d &lt;span class=&quot;nt&quot;&gt;-or&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-type&lt;/span&gt; f&lt;span class=&quot;se&quot;&gt;\)&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-mtime&lt;/span&gt; +1 &lt;span class=&quot;nt&quot;&gt;-delete&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;I use &lt;code class=&quot;highlighter-rouge&quot;&gt;find&lt;/code&gt; to lookup all files and directories that are older than one day and delete any files found matching that criteria. That way if I come across an interesting article I’m forced to either look at it then and there or take the time to make a judgment about how mission-critical it actually is. Now I find myself being more discerning about what things I take on and dealing less with information overload.&lt;/p&gt;
+
+&lt;p&gt;It’s funny how a cron job can change your perspective on things.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 26 Jan 2016 00:00:00 +0000</pubDate>
+        <link>http://ntdef.com/2016/cron-cleanout-downloads/</link>
+        <guid isPermaLink="true">http://ntdef.com/2016/cron-cleanout-downloads/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>How to use your NameCheap domain name on Github Pages</title>
+        <description>&lt;p&gt;Clearly, static blogs are all the rage these days, especially since you can
+host your blog for free on github pages. It’s simply a breeze.&lt;/p&gt;
+
+&lt;p&gt;However, getting my personal domain name to appear on the site was a bit
+tricky. I was suddenly receiving infinite redirect loop errors whenever I tried
+visiting my blog. The problem, as I later found out, was how I had set up
+domain forwarding on NameCheap.&lt;/p&gt;
+
+&lt;h2 id=&quot;namecheap-forwarding-done-right&quot;&gt;NameCheap Forwarding Done Right&lt;/h2&gt;
+
+&lt;p&gt;Assuming that you’ve &lt;a href=&quot;https://help.github.com/articles/tips-for-configuring-a-cname-record-with-your-dns-provider/&quot;&gt;added a CNAME file at the root of your repo&lt;/a&gt;,
+to set up your NameCheap domain to forward properly to github pages, &lt;strong&gt;do not&lt;/strong&gt;
+use the forwarding link in the sidebar. This was my first mistake: even though
+it seems like the right option, the configuration options NameCheap provides in
+that view are too limited for setting up forwarding to GitHub. Instead navigate
+to &lt;code class=&quot;highlighter-rouge&quot;&gt;All Host Records&lt;/code&gt; which has more fields for adding the appropriate IP
+addresses.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/namecheap-ghpages-1.png&quot; alt=&quot;namecheap-ghpages-1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To set up forwarding you need to add two static IP destinations that GitHub
+provides
+&lt;a href=&quot;https://help.github.com/articles/my-custom-domain-isn-t-working/#dns-errors&quot;&gt;here&lt;/a&gt;
+which should be the same as the ones listed below.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/namecheap-ghpages-2.png&quot; alt=&quot;namecheap-ghpages-2&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;other-possible-pitfalls&quot;&gt;Other Possible Pitfalls&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Don’t specify the protocol in the CNAME file. Just omit the &lt;code class=&quot;highlighter-rouge&quot;&gt;http://&lt;/code&gt; prefix and you’ll be fine.&lt;/li&gt;
+  &lt;li&gt;For the CNAME record type in NameCheap’s portal, the trailing period is added automatically and is harmless.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 04 Sep 2015 00:00:00 +0000</pubDate>
+        <link>http://ntdef.com/2015/adding-a-custom-domain-name-to-gh-pages/</link>
+        <guid isPermaLink="true">http://ntdef.com/2015/adding-a-custom-domain-name-to-gh-pages/</guid>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
