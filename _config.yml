@@ -11,7 +11,7 @@ disqus_shortname: "ntdef"
 # Build settings
 permalink   : /:year/:title/
 markdown    : kramdown
-highlighter : pygments
+highlighter : rouge
 
 paginate: 4
 paginate_path: "/page/:num/"
@@ -28,8 +28,6 @@ sass:
 # Author settings
 author:
   name     : Troy de Freitas
-  job      : data scientist and machine learning engineer
-  bio      : "If you’re in Chicago and you’d like to get coffee let me know! If you want to see what I’ve built you should look at my projects. While you’re there, you should take a look at Hume which I built to make deploying machine learning models a lot easier."
   thumb    : /images/author.jpg
   email    : me@ntdef.com
   url      : http://ntdef.com

@@ -5,10 +5,12 @@ layout: compress
 <html>
   {% include head.html %}
   <body>
-    <main class="wrapper">
+    <div class="container">
       {% include header.html %}
-      {{ content }}
+      <main class="tmpl-home">
+        {{ content }}
+      </main>
       {% include footer.html %}
-    </main>
+    </div>
   </body>
 </html>

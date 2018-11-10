@@ -16,5 +16,5 @@ group :jekyll_plugins do
   gem "jekyll-redirect-from"
   gem "sass"
   gem "bourbon", '~> 4.2', '>= 4.2.6'
-  gem "pygments.rb", '~> 0.6.3'
+  gem "rouge"
 end

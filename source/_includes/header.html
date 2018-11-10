@@ -1,3 +1,7 @@
-<header class="site-header">
-  {% include nav.html %}
+<header>
+  <ul class="nav">
+    {%- for nav in site.data.nav.links -%}
+    <li class="nav-item{% if nav.url == page.url %} nav-item-active{% endif %}"><a href="{{ nav.url | url }}">{{ nav.title }}</a></li>
+    {%- endfor -%}
+  </ul>
 </header>

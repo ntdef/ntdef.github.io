@@ -11,7 +11,7 @@ The same goes for downloads. I would find myself dowloading files with the inten
 
 {% highlight sh %}
 # Runs every day at 5:45 pm
-45 17 * * * ntdef find ~/Downloads \( -type d -or -type f \) -mtime +1 -delete
+45 17 * * * find ~/Downloads \(-type d -or -type f\) -mtime +1 -delete
 {% endhighlight %}
 
 I use `find` to lookup all files and directories that are older than one day and delete any files found matching that criteria. That way if I come across an interesting article I'm forced to either look at it then and there or take the time to make a judgment about how mission-critical it actually is. Now I find myself being more discerning about what things I take on and dealing less with information overload.
